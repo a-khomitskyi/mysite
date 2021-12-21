@@ -18,13 +18,13 @@
 				  <div class="row g-0">
 					  {% if item.photo %}
 					  <div class="col-md-3 " style="margin-top: auto; margin-bottom: auto">
-						  <a href="{{ item.get_absolute_url }}">
+						  <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
 							  <img src="{{ item.photo.url }}" class="img-fluid rounded-start" alt="...">
 						  </a>
 					  </div>
 					  <div class="col">
 						  <div class="card-body">
-							  <a href="{% url 'category' item.category_id %}">
+							  <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
 								  <p class="card-text"><small>{{ item.category }}</small></p>
 							  </a>
 							  <br>
@@ -42,7 +42,7 @@
 					  {% else %}
 					  <div class="col">
 						  <div class="card-body">
-							  <a href="{% url 'category' item.category_id %}" style="text-decoration: none">
+							  <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
 								  <p class="card-text"><small>{{ item.category }}</small></p>
 							  </a>
 							  <a href="{{ item.get_absolute_url }}" style="text-decoration: none; color: black">

@@ -8,7 +8,7 @@ def index(requests):
 
 
 def category_news(request, category_id):
-    news = News.objects.filter(id=category_id, is_published=True)
+    news = News.objects.filter(category_id=category_id, is_published=True)
     category = Categories.objects.get(id=category_id)
     return render(request, 'category_news.html', {'news': news, 'category': category})
 
@@ -16,3 +16,4 @@ def category_news(request, category_id):
 def show_full_news(requests, news_id):
     news = News.objects.all().get(id=news_id)
     return render(requests, 'news_detail.html', {'news': news})
+
