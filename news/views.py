@@ -1,11 +1,25 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from news.models import News, Categories
+from django.views.generic import ListView
 from .forms import NewsForm
 
 
-def index(requests):
-    news = News.objects.all().filter(is_published=True)
-    return render(requests, 'index.html', {'news': news})
+class HomeNews(ListView):
+
+    model = News
+    template_name = 'index.html'
+    context_object_name = 'news'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Головна сторінка'
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(is_published=True)
+# def index(requests):
+#     news = News.objects.all().filter(is_published=True)
+#     return render(requests, 'index.html', {'news': news})
 
 
 def category_news(request, category_id):
@@ -23,8 +37,7 @@ def news_propose(requests):
     if requests.method == 'POST':
         form = NewsForm(requests.POST, requests.FILES)
         if form.is_valid():
-            news = News.objects.create(**form.cleaned_data)
-            news.save()
+            news = form.save()
             return redirect(news)
     else:
         form = NewsForm()
