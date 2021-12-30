@@ -1,68 +1,98 @@
 {% load static %}
 <!doctype html>
 <html lang="uk">
-  <head>
-	  <meta charset="utf-8">
-	  <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-	  <link href="{% static 'custom/style.css' %}" rel="stylesheet">
-	  <title>{% block title %}Новинний сайт{% endblock %}</title>
-  </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'custom/style.css' %}" rel="stylesheet">
+    <title>{% block title %}Новинний сайт{% endblock %}</title>
+</head>
 
-  <body>
-	  {% block navbar %}
-		  {% include "inc/_navbar.html" %}
-	  {% endblock %}
+<body>
+{% block navbar %}
+    {% include "inc/_navbar.html" %}
+{% endblock %}
 
-	  {% block content %}
-		  {% for item in news %}
-			  <div class="card mb-3" style="max-width: 100%; margin-bottom: auto; margin-top: auto">
-				  <div class="row g-0">
-					  {% if item.photo %}
-					  <div class="col-md-3 " style="margin-top: auto; margin-bottom: auto">
-						  <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
-							  <img src="{{ item.photo.url }}" class="img-fluid rounded-start" alt="...">
-						  </a>
-					  </div>
-					  <div class="col">
-						  <div class="card-body">
-							  <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
-								  <p class="card-text"><small>{{ item.category }}</small></p>
-							  </a>
-							  <br>
-							  <a href="{{ item.get_absolute_url }}" style="text-decoration: none; color: black">
-								  <h5 class="card-title">{{ item.title }}</h5>
-								  <p class="card-text"><small class="text-muted">{{ item.created_at|date:"d.m.Y  H:i" }}</small></p>
-								  <p class="card-text">{{ item.content|safe|linebreaks|truncatewords:50 }}...</p>
-							  </a>
-							  <a href="{{ item.get_absolute_url }}">
-								  <button type="button" class="btn btn-outline-info">Читати повністю</button>
-							  </a>
-						  </div>
-					  </div>
+{% block content %}
+    {% for item in news %}
+        <div class="card mb-3"
+             style="max-width: 100%; margin-bottom: auto; margin-top: auto; margin-left: 1%; margin-right: 1%;">
+            <div class="row g-0">
+                {% if item.photo %}
+                    <div class="col-md-3 " style="margin-top: auto; margin-bottom: auto">
+                        <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
+                            <img src="{{ item.photo.url }}" class="img-fluid rounded-start" alt="...">
+                        </a>
+                    </div>
+                    <div class="col">
+                        <div class="card-body">
+                            <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
+                                <p class="card-text"><small>{{ item.category }}</small></p>
+                            </a>
+                            <br>
+                            <a href="{{ item.get_absolute_url }}" style="text-decoration: none; color: black">
+                                <h5 class="card-title">{{ item.title }}</h5>
+                                <p class="card-text"><small
+                                        class="text-muted">{{ item.created_at|date:"d.m.Y  H:i" }}</small></p>
+                                <p class="card-text">{{ item.content|safe|linebreaks|truncatewords:50 }}...</p>
+                            </a>
+                            <a href="{{ item.get_absolute_url }}">
+                                <button type="button" class="btn btn-outline-info">Читати повністю</button>
+                            </a>
+                        </div>
+                    </div>
 
-					  {% else %}
-					  <div class="col">
-						  <div class="card-body">
-							  <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
-								  <p class="card-text"><small>{{ item.category }}</small></p>
-							  </a>
-							  <a href="{{ item.get_absolute_url }}" style="text-decoration: none; color: black">
-								  <h5 class="card-title">{{ item.title }}</h5>
-								  <p class="card-text"><small class="text-muted">{{ item.created_at|date:"d.m.Y  H:i" }}</small></p>
-								  <p class="card-text">{{ item.content|safe|truncatewords:30 }}...</p>
-							  </a>
-							  <br>
-							  <a href="{{ item.get_absolute_url }}">
-								  <button type="button" class="btn btn-outline-info">Читати повністю</button>
-							  </a>
-						  </div>
-					  </div>
-					  {% endif %}
-				  </div>
-			  </div>
-			  {% endfor %}
-		  {% endblock %}
+                {% else %}
+                    <div class="col">
+                        <div class="card-body">
+                            <a href="{{ item.get_absolute_url }}" style="text-decoration: none">
+                                <p class="card-text"><small>{{ item.category }}</small></p>
+                            </a>
+                            <a href="{{ item.get_absolute_url }}" style="text-decoration: none; color: black">
+                                <h5 class="card-title">{{ item.title }}</h5>
+                                <p class="card-text"><small
+                                        class="text-muted">{{ item.created_at|date:"d.m.Y  H:i" }}</small></p>
+                                <p class="card-text">{{ item.content|safe|truncatewords:30 }}...</p>
+                            </a>
+                            <br>
+                            <a href="{{ item.get_absolute_url }}">
+                                <button type="button" class="btn btn-outline-info">Читати повністю</button>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
 
-  </body>
+{% if page_obj.has_other_pages %}
+    {% block paginator %}
+
+        <nav aria-label="..." style="margin-left: 1%">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" tabindex="-1"
+                                             href="?page={{ page_obj.previous_page_number }}">Попередня</a>
+                    </li>
+                {% endif %}
+                {% for p in page_obj.paginator.page_range %}
+                    {% if page_obj.number == p %}
+                        <li class="page-item active"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                    {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
+                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                    {% else %}
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Наступна</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    {% endblock %}
+{% endif %}
+</body>
 </html>

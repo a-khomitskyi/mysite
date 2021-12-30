@@ -10,6 +10,7 @@ class News(models.Model):
     photo = models.ImageField(verbose_name='Фото', upload_to='media/%Y/%m/%d/', max_length=150, blank=True)
     is_published = models.BooleanField(default=True, verbose_name='Опубліковано')
     category = models.ForeignKey('Categories', on_delete=models.CASCADE, verbose_name='Категорія')
+    views_count = models.IntegerField(default=0, verbose_name='Кількість переглядів')
 
     class Meta:
         verbose_name = 'Новина'
@@ -20,7 +21,7 @@ class News(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('news_info', kwargs={'news_id': self.pk})
+        return reverse('news_info', kwargs={'pk': self.pk})
 
 
 class Categories(models.Model):

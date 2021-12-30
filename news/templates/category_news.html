@@ -1,2 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}{{ category.title }}::{{ block.super }}{% endblock %}
+{% block title %}{{ category.title }} :: {{ block.super }}{% endblock %}
+{% block content %}
+    <h1 style="margin: 1%">{{ category.title }}</h1>
+    {{ block.super }}
+{% endblock %}

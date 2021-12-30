@@ -1,44 +1,64 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from news.models import News, Categories
-from django.views.generic import ListView
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+
 from .forms import NewsForm
+from news.models import News, Categories
 
 
 class HomeNews(ListView):
-
     model = News
     template_name = 'index.html'
     context_object_name = 'news'
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Головна сторінка'
+        context['title'] = 'Новинний сайт'
         return context
 
     def get_queryset(self):
-        return News.objects.filter(is_published=True)
-# def index(requests):
-#     news = News.objects.all().filter(is_published=True)
-#     return render(requests, 'index.html', {'news': news})
+        return News.objects.filter(is_published=True).select_related('category')
 
 
-def category_news(request, category_id):
-    news = News.objects.filter(category_id=category_id, is_published=True)
-    category = Categories.objects.get(id=category_id)
-    return render(request, 'category_news.html', {'news': news, 'category': category})
+class CategoryNews(ListView):
+    model = News
+    template_name = 'category_news.html'
+    context_object_name = 'news'
+    allow_empty = False
+    paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = Categories.objects.get(pk=self.kwargs['category_id'])
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(category=self.kwargs['category_id'], is_published=True).select_related('category')
 
 
-def show_full_news(requests, news_id):
-    news = get_object_or_404(News, pk=news_id)
-    return render(requests, 'news_detail.html', {'news': news})
+class ViewNews(DetailView):
+    model = News
+    template_name = 'news_detail.html'
+    context_object_name = 'news'
 
 
-def news_propose(requests):
-    if requests.method == 'POST':
-        form = NewsForm(requests.POST, requests.FILES)
-        if form.is_valid():
-            news = form.save()
-            return redirect(news)
+class CreateNews(LoginRequiredMixin, CreateView):
+    login_url = '/admin/'
+    form_class = NewsForm
+    template_name = 'news_propose.html'
+
+
+def get_find_result(request):
+    to_find = request.GET.get('q')
+    if to_find:
+        queryset = News.objects.filter(content__icontains=to_find).select_related(
+            'category') or News.objects.filter(title__icontains=to_find).select_related('category')
+
+        paginator = Paginator(queryset, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'view_result.html', {'page_obj': page_obj, 'q': to_find, 'count': len(queryset)})
     else:
-        form = NewsForm()
-    return render(requests, 'news_propose.html', context={'form': form})
+        return render(request, 'view_result.html')
