@@ -19,10 +19,26 @@
                 {% endfor %}
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{% url 'news_propose' %}">Запропонувати новину</a>
+                        <a class="nav-link" aria-current="page" href="{% url 'news_propose' %}">Додати новину</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'contact_us' %}">Зв'язатися з нами</a>
                     </li>
                 {% endif %}
             </ul>
+
+            {% block login-logout %}
+                {% if request.user.is_authenticated %}
+                    <span class="navbar-text" style="margin-right: 2%">
+                        <div>Вітаю, {{ request.user.username }} | <a href="{% url 'logout' %}">Вихід</a></div>
+                    </span>
+                {% else %}
+                    <span class="navbar-text" style="margin-right: 2%">
+                        <a href="{% url 'login' %}">Вхід</a> | <a href="{% url 'register' %}">Реєстрація</a>
+                    </span>
+                {% endif %}
+            {% endblock %}
+
             <form class="d-flex" action="{% url 'view_find_result' %}" method="get">
                 <label for="site-search"></label>
                 <input class="form-control me-2" name="q" type="text" placeholder="Введіть запит" aria-label="Search">

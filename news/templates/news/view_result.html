@@ -1,34 +1,10 @@
-{% load static %}
-<!doctype html>
-<html lang="uk">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'custom/style.css' %}" rel="stylesheet">
-    <title>{% block title %}Новинний сайт{% endblock %}</title>
-</head>
-
-<body>
-
-{% block navbar %}
-    {% include "inc/_navbar.html" %}
+{% extends 'base.html' %}
+{% block title %}
+    Результати пошуку :: {{ block.super }}
 {% endblock %}
-
-<div class="col">
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'error' %}
-                <div class="alert alert-danger" role="alert">{{ message }}</div>
-            {% else %}
-                <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-</div>
-
 {% block content %}
-    {% for item in news %}
+    <h1 style="margin: 1%">Результати пошуку - {{ count }}</h1>
+    {% for item in page_obj %}
         <div class="card mb-3"
              style="max-width: 100%; margin-bottom: auto; margin-top: auto; margin-left: 1%; margin-right: 1%;">
             <div class="row g-0">
@@ -78,6 +54,7 @@
             </div>
         </div>
     {% endfor %}
+
 {% endblock %}
 
 {% if page_obj.has_other_pages %}
@@ -87,19 +64,19 @@
             <ul class="pagination">
                 {% if page_obj.has_previous %}
                     <li class="page-item"><a class="page-link" tabindex="-1"
-                                             href="?page={{ page_obj.previous_page_number }}">Попередня</a>
+                                             href="?q={{ q }}&page={{ page_obj.previous_page_number }}">Попередня</a>
                     </li>
                 {% endif %}
                 {% for p in page_obj.paginator.page_range %}
                     {% if page_obj.number == p %}
-                        <li class="page-item active"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                        <li class="page-item active"><a class="page-link" href="?q={{ q }}&page={{ p }}">{{ p }}</a></li>
                     {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
-                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                        <li class="page-item"><a class="page-link" href="?q={{ q }}&page={{ p }}">{{ p }}</a></li>
                     {% else %}
                     {% endif %}
                 {% endfor %}
                 {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Наступна</a>
+                    <li class="page-item"><a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}">Наступна</a>
                     </li>
                 {% endif %}
             </ul>
@@ -107,5 +84,3 @@
 
     {% endblock %}
 {% endif %}
-</body>
-</html>
