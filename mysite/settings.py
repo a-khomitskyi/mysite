@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os.path
 import os
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,11 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7#w2#74!oxc22939%f(x7nr@+2vgwte0w$*bn1-2d)vo@c*e3c'
-# 'django-insecure-7#w2#74!oxc22939%f(x7nr@+2vgwte0w$*bn1-2d)vo@c*e3c'
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', False)
 
 ALLOWED_HOSTS = []
 
@@ -134,10 +134,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 INTERNAL_IPS = ["127.0.0.1"]
 
 # Setting Email
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.ukr.net'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'andrii.khomitskyi-ipm201@nung.edu.ua'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
+EMAIL_RECIPIENT = os.getenv('EMAIL_RECIPIENT')
 EMAIL_USE_SSL = True
 
 # Captcha settings

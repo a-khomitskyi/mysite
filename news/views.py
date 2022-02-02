@@ -1,3 +1,5 @@
+import os
+
 from django.db.models import F
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
@@ -49,7 +51,9 @@ def contact_us(request):
     if request.method == 'POST':
         form = ContactUsForm(request.POST)
         if form.is_valid():
-            result = send_mail(f'[{form.cleaned_data["name"]}] ' + form.cleaned_data['subject'], form.cleaned_data['content'], 'andrii.khomitskyi-ipm201@nung.edu.ua', [form.cleaned_data['email']])
+            result = send_mail(f'[{form.cleaned_data["name"]}] ' + form.cleaned_data['subject'], form.cleaned_data['content'],
+                               from_email=os.getenv('EMAIL_HOST'),
+                               recipient_list=[os.getenv('EMAIL_RECIPIENT')])
             if result:
                 messages.success(request, 'Лист надіслано!')
                 return redirect('home')
