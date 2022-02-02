@@ -9,7 +9,6 @@ from django.core.mail import send_mail
 
 from .forms import NewsForm, UserRegisterForm, UserLoginForm, ContactUsForm
 from news.models import News, Categories
-from .utils import parse
 
 
 def register(request):
@@ -102,7 +101,7 @@ class ViewNews(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        counter = News.objects.filter(pk=self.kwargs['pk']).update(views_count=F('views_count') + 1)
+        News.objects.filter(pk=self.kwargs['pk']).update(views_count=F('views_count') + 1)
         return context
 
 
