@@ -1,49 +1,52 @@
 {% load news_tags %}
+{% load static %}
 {% get_list_categories as categories %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home' %}">Новинний сайт</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
-                aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarScroll">
-            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                {% for category in categories %}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page"
-                           href="{{ category.get_absolute_url }}">{{ category.title }} <span
-                                class="badge bg-primary rounded-pill">{{ category.cnt }}</span></a>
-                    </li>
-                {% endfor %}
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{% url 'news_propose' %}">Додати новину</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{% url 'contact_us' %}">Зв'язатися з нами</a>
-                    </li>
-                {% endif %}
-            </ul>
+	<div class="container-fluid">
+		<a class="navbar-brand" href="{% url 'home' %}">Новинний сайт</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+				aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarScroll">
+			<ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+				{% for category in categories %}
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page"
+						   href="{{ category.get_absolute_url }}">{{ category.title }} <span
+								class="badge bg-primary rounded-pill">{{ category.cnt }}</span></a>
+					</li>
+				{% endfor %}
+				{% if request.user.is_authenticated %}
+					<li class="nav-item">
+						<a class="nav-link" aria-current="page" href="{% url 'news_propose' %}">Додати новину</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" aria-current="page" href="{% url 'contact_us' %}">Зв'язатися з нами</a>
+					</li>
+				{% endif %}
+			</ul>
 
-            {% block login-logout %}
-                {% if request.user.is_authenticated %}
-                    <span class="navbar-text" style="margin-right: 2%">
+			{% block login-logout %}
+				{% if request.user.is_authenticated %}
+					<span class="navbar-text" style="margin-right: 2%">
                         <div>Вітаю, {{ request.user.username }} | <a href="{% url 'logout' %}">Вихід</a></div>
                     </span>
-                {% else %}
-                    <span class="navbar-text" style="margin-right: 2%">
+				{% else %}
+					<span class="navbar-text" style="margin-right: 2%">
                         <a href="{% url 'login' %}">Вхід</a> | <a href="{% url 'register' %}">Реєстрація</a>
                     </span>
-                {% endif %}
-            {% endblock %}
+				{% endif %}
+			{% endblock %}
 
-            <form class="d-flex" action="{% url 'view_find_result' %}" method="get">
-                <label for="site-search"></label>
-                <input class="form-control me-2" name="q" type="text" placeholder="Введіть запит" aria-label="Search">
-                <button class="btn btn-outline-info" type="submit">Шукати</button>
-            </form>
-        </div>
-    </div>
+			<form class="d-flex" action="{% url 'view_find_result' %}" method="get">
+				<label for="site-search"></label>
+				<input class="form-control me-2" name="q" type="text" placeholder="Введіть запит" aria-label="Search">
+				<button class="btn btn-outline-info" type="submit">Шукати</button>
+			</form>
+		</div>
+	</div>
 </nav>
+
+<script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
