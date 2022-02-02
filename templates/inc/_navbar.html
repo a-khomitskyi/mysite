@@ -31,7 +31,7 @@
 			{% block login-logout %}
 				{% if request.user.is_authenticated %}
 					<span class="navbar-text" style="margin-right: 2%">
-                        <div>Вітаю, {{ request.user.username }} | <a href="{% url 'logout' %}">Вихід</a></div>
+                        Вітаю, {{ request.user.username }} | <a href="{% url 'logout' %}">Вихід</a>
                     </span>
 				{% else %}
 					<span class="navbar-text" style="margin-right: 2%">
