@@ -15,6 +15,7 @@ from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 import sys
 import dj_database_url
+from .cdn.conf import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'news.apps.NewsConfig',
     'debug_toolbar',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -235,3 +237,8 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
+
+
+# Allow only HTTPS connections
+SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", False)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
