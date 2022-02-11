@@ -114,6 +114,11 @@ class CreateNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/news_propose.html'
 
+    def form_valid(self, form):
+        news = form.save(commit=False)
+        news.save()
+        return redirect('home')
+
 
 def get_find_result(request):
     to_find = request.GET.get('q')

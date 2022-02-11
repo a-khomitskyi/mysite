@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 	<h1 style="margin: 1%">Додати новину</h1>
-	<form action="{% url 'news_propose' %}" method="post" style="margin: 1%;">
+	<form action="{% url 'news_propose' %}" method="post" style="margin: 1%;" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form.non_field_errors }}
 		{{ form.as_p }}

@@ -1,20 +1,26 @@
 from django import forms
-from .models import News
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from captcha.fields import CaptchaField
+
+from .models import News
 import re
 
 
 class NewsForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(NewsForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name != 'is_published':
+                field.widget.attrs['class'] = 'form-control'
+
     class Meta:
         model = News
         fields = ('title', 'content', 'photo', 'is_published', 'category')
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-            'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'is_published': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'category': forms.Select(attrs={'class': 'form-select'})
         }
