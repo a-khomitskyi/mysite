@@ -12,3 +12,4 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = "https://news1.fra1.digitaloceanspaces.com"
 DEFAULT_FILE_STORAGE = "mysite.cdn.backends.MediaRootS3BotoStorage"
 STATICFILES_STORAGE = 'mysite.cdn.backends.StaticRootS3BotoStorage'
+AWS_QUERYSTRING_AUTH = False
